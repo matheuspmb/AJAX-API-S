@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Piadas do Chuck Norris</title>
+    <title>Piadas do Chuck Norris</title>
 </head>
+
 <body>
     <div style="text-align:center">
         <image src="ChuckNorris.png" height="200" width="400">
@@ -15,22 +17,44 @@
         <button onclick="GetPiadaAleatoria()">Piada aleatória</button>
         <p id="piada"></p>
     </div>
+    <div style="text-align:center">
+        <h3>Categorias</h3>
+        <p>Para ver as categorias das piadas, clique no botão abaixo</p>
+        <button onclick="GetCategorias()">Categorias</button>
+        <ul id="categorias"></ul>
+    </div>
 
     <script>
         function GetPiadaAleatoria() {
-    
             fetch('https://api.chucknorris.io/jokes/random')
                 .then(response => response.json())
                 .then(data => {
-                    const piadaChuckNorris = document.getElementById('piada')
+                    const piadaChuckNorris = document.getElementById('piada');
                     piadaChuckNorris.textContent = data.value;
                 })
                 .catch(error => {
-                    console.error("Erro ao obter piada: ", error)
-                })    
+                    console.error("Erro ao obter piada: ", error);
+                });
         }
-    
+
+        function GetCategorias() {
+            fetch('https://api.chucknorris.io/jokes/categories')
+                .then(response => response.json())
+                .then(data => {
+                    const categorias = document.getElementById('categorias');
+                    categorias.innerHTML = ''; // Limpa qualquer conteúdo anterior
+                    data.forEach(categoria => {
+                        const li = document.createElement('li');
+                        li.textContent = categoria;
+                        categorias.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error("Erro ao obter categorias: ", error);
+                });
+        }
     </script>
 
 </body>
+
 </html>
