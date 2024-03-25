@@ -67,19 +67,18 @@
                 return;
             }
 
-            // Realizar a busca por palavra-chave usando a API do Chuck Norris
             fetch(`https://api.chucknorris.io/jokes/search?query=${keyword}`)
                 .then(response => response.json())
                 .then(data => {
                     const resultadoBusca = document.getElementById('resultadoBusca');
-                    resultadoBusca.innerHTML = ''; // Limpa qualquer conteúdo anterior
+                    resultadoBusca.innerHTML = '';
 
                     if (data.result.length === 0) {
                         mostrarMensagemErro('Nenhuma piada encontrada com essa palavra-chave.');
                         return;
                     }
 
-                    // Exibir piadas encontradas
+                    // Irá exibir as piadas encontradas
                     data.result.forEach(piada => {
                         const p = document.createElement('p');
                         p.textContent = piada.value;
