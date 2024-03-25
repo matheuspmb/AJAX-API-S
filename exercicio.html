@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piadas do Chuck Norris</title>
 </head>
-
 <body>
     <div style="text-align:center">
         <image src="ChuckNorris.png" height="200" width="400">
@@ -23,6 +21,12 @@
         <button onclick="GetCategorias()">Categorias</button>
         <ul id="categorias"></ul>
     </div>
+    <div style="text-align:center">
+        <h3>Busca por palavra-chave</h3>
+        <input type="text" id="keyword" placeholder="Digite uma palavra-chave">
+        <button onclick="BuscarPorPalavraChave()">Buscar</button>
+        <p id="resultadoBusca"></p>
+    </div>
 
     <script>
         function GetPiadaAleatoria() {
@@ -36,7 +40,7 @@
                     console.error("Erro ao obter piada: ", error);
                 });
         }
-
+        
         function GetCategorias() {
             fetch('https://api.chucknorris.io/jokes/categories')
                 .then(response => response.json())
@@ -53,8 +57,44 @@
                     console.error("Erro ao obter categorias: ", error);
                 });
         }
+
+        function BuscarPorPalavraChave() {
+            const keywordInput = document.getElementById('keyword');
+            const keyword = keywordInput.value.trim();
+
+            if (keyword === '') {
+                mostrarMensagemErro('Por favor, digite uma palavra-chave para buscar.');
+                return;
+            }
+
+            // Realizar a busca por palavra-chave usando a API do Chuck Norris
+            fetch(`https://api.chucknorris.io/jokes/search?query=${keyword}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultadoBusca = document.getElementById('resultadoBusca');
+                    resultadoBusca.innerHTML = ''; // Limpa qualquer conteúdo anterior
+
+                    if (data.result.length === 0) {
+                        mostrarMensagemErro('Nenhuma piada encontrada com essa palavra-chave.');
+                        return;
+                    }
+
+                    // Exibir piadas encontradas
+                    data.result.forEach(piada => {
+                        const p = document.createElement('p');
+                        p.textContent = piada.value;
+                        resultadoBusca.appendChild(p);
+                    });
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar por palavra-chave: ", error);
+                });
+        }
+
+        function mostrarMensagemErro(mensagem) {
+            const resultadoBusca = document.getElementById('resultadoBusca');
+            resultadoBusca.innerHTML = `<span style="color: red;">${mensagem}</span>`;
+        }
     </script>
-
 </body>
-
 </html>
